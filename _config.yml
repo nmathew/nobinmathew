@@ -47,7 +47,7 @@ jekyll-archives:
     tag: '/tag/:name/'
 
 # Disqus comments
-# disqus_shortname: bencentra
+disqus_shortname: nmathew
 
 # Google analytics
 # ga_tracking_id: "UA-XXXX-1"
@@ -85,21 +85,21 @@ social:
 
   - name: Facebook
     icon: facebook
-    username: thebencentra
+    username: 
     url: ""
     desc: Friend me on Facebook
     share: true
 
   - name: GitHub
     icon: github
-    username: bencentra
+    username: 
     url: ""
     desc: Fork me on GitHub
     share: false
 
   - name: LinkedIn
     icon: linkedin
-    username: Ben Centra
+    username: 
     url: ""
     desc: Connect with me on LinkedIn
     share: true
