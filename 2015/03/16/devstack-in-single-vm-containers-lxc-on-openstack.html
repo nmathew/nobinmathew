@@ -9,8 +9,8 @@
   <title>Devstack in single VM: Containers( LXC ) on Openstack</title>
   <meta name="description" content="Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using o...">
   
-  <meta name="author" content="Nobin Mathew">
-  <meta name="copyright" content="&copy; Nobin Mathew 2020">
+  <meta name="author" content="Ben Centra">
+  <meta name="copyright" content="&copy; Ben Centra 2020">
   
 
   <!-- External libraries -->
@@ -42,11 +42,11 @@
   
   <!-- Facebook OGP cards -->
   <meta property="og:description" content="Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using o..." />
-  <meta property="og:url" content="nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
-  <meta property="og:site_name" content="Double Barrel" />
+  <meta property="og:url" content="/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
+  <meta property="og:site_name" content="Centrarium" />
   <meta property="og:title" content="Devstack in single VM: Containers( LXC ) on Openstack" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="nobinmathew.com/assets/logo.png" />
+  <meta property="og:image" content="/assets/logo.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="612" />
   <meta property="og:image:height" content="605" />
@@ -57,16 +57,16 @@
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Devstack in single VM: Containers( LXC ) on Openstack">
   <meta name="twitter:description" content="Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using o...">
-  <meta name="twitter:image" content="nobinmathew.com/assets/logo.png">
-  <meta name="twitter:url" content="nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
+  <meta name="twitter:image" content="/assets/logo.png">
+  <meta name="twitter:url" content="/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
   
 
   
 
   <!-- Site styles -->
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
-	<link rel="alternate" type="application/rss+xml" title="Double Barrel" href="nobinmathew.com/feed.xml" />
+  <link rel="canonical" href="/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
+	<link rel="alternate" type="application/rss+xml" title="Centrarium" href="/feed.xml" />
 	
 	<!-- Tooltips -->
 	<script type="text/javascript">
@@ -81,7 +81,7 @@
   <div class="navigation-wrapper">
     <a href="/" class="logo">
       
-      <img src="/assets/logo.png" alt="Double Barrel">
+      <img src="/assets/logo.png" alt="Centrarium">
       
     </a>
     <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
@@ -95,13 +95,157 @@
 	
 
 	
-
-	
 	<li class="nav-link"><a href="/posts/">Posts</a>
 	
 
 	
 	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
 	
 
 	
@@ -271,7 +415,7 @@ enable_service q-meta
   
     
     
-      <a href="//twitter.com/share?text=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html&via="
+      <a href="//twitter.com/share?text=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html&via=TheBenCentra"
         onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
         <i class="fa fa-twitter-square fa-lg"></i>
       </a>
@@ -286,7 +430,7 @@ enable_service q-meta
     
     
     
-      <a href="//www.facebook.com/sharer.php?t=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&u=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
+      <a href="//www.facebook.com/sharer.php?t=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&u=%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
         onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
         <i class="fa fa-facebook-square fa-lg"></i>
       </a>
@@ -311,7 +455,7 @@ enable_service q-meta
     
     
     
-      <a href="//www.linkedin.com/shareArticle?mini=true&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
+      <a href="//www.linkedin.com/shareArticle?mini=true&url=%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
         onclick="window.open(this.href, 'linkedin-share', 'width=550,height=255');return false;">
         <i class="fa fa-linkedin-square fa-lg"></i>
       </a>
@@ -324,7 +468,7 @@ enable_service q-meta
     
     
     
-      <a href="//plus.google.com/share?title=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
+      <a href="//plus.google.com/share?title=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
         onclick="window.open(this.href, 'google-plus-share', 'width=550,height=255');return false;">
         <i class="fa fa-google-plus-square fa-lg"></i>
       </a>
@@ -358,7 +502,7 @@ enable_service q-meta
     
     
     
-      <a href="//www.pinterest.com/pin/create/button/?description=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html&media=nobinmathew.com/assets/header_image.jpg"
+      <a href="//www.pinterest.com/pin/create/button/?description=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html&media=/assets/header_image.jpg"
         onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
         <i class="fa fa-pinterest-square fa-lg"></i>
       </a>
@@ -427,7 +571,7 @@ enable_service q-meta
     
     
     
-      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html') + '&title=Devstack in single VM: Containers( LXC ) on Openstack'; return false">
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html') + '&title=Devstack in single VM: Containers( LXC ) on Openstack'; return false">
         <i class="fa fa-reddit-square fa-lg"></i>
       </a>
     
@@ -444,31 +588,6 @@ enable_service q-meta
   
 </section>
 
-	<section class="post-navigation">
-		<span class="prev-post">
-			
-				<a href="/2012/08/10/non-blocking-accept-and-connect.html">
-					<span class="fa-stack fa-lg">
-						<i class="fa fa-square fa-stack-2x"></i>
-						<i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
-					</span>
-					<span class="page-number">Non-blocking accept() and connect()</span>
-				</a>
-			
-		</span>
-		<span class="next-post">
-			
-				<a href="/2015/03/16/linux-glibc-heap-internals.html">
-					<span class="page-number">Linux Glibc Heap internals</span>
-					<span class="fa-stack fa-lg">
-						<i class="fa fa-square fa-stack-2x"></i>
-						<i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>
-					</span>
-				</a>
-			
-		</span>
-	</section>
-
 
 
 
@@ -481,15 +600,13 @@ enable_service q-meta
 
   <div class="wrapper">
 
-    <h3 class="footer-heading">Double Barrel</h3>
+    <h3 class="footer-heading">Centrarium</h3>
 
     <div class="site-navigation">
 
       <p><strong>Site Map</strong></p>
       <ul class="pages">
 				
-	
-
 	
 
 	
@@ -512,6 +629,152 @@ enable_service q-meta
 
 	
 
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
 
       </ul>
     </div>
@@ -521,19 +784,40 @@ enable_service q-meta
       <p><strong>Contact</strong></p>
       <ul class="social-media-list">
         <li>
-          <a href="mailto:nobin.mathew@gmail.com">
+          <a href="mailto:blcentra@gmail.com">
             <i class="fa fa-envelope-o"></i>
-            <span class="username">nobin.mathew@gmail.com</span>
+            <span class="username">blcentra@gmail.com</span>
           </a>
         </li>
 
         
           
-        
+          <li>
+            <a href="https://twitter.com/TheBenCentra" title="Follow me on Twitter">
+              <i class="fa fa-twitter"></i>
+              <span class="username">TheBenCentra</span>
+            </a>
+          </li>
           
         
           
         
+          
+          <li>
+            <a href="https://github.com/bencentra" title="Fork me on GitHub">
+              <i class="fa fa-github"></i>
+              <span class="username">bencentra</span>
+            </a>
+          </li>
+          
+        
+          
+          <li>
+            <a href="https://www.linkedin.com/pub/ben-centra/47/769/60a" title="Connect with me on LinkedIn">
+              <i class="fa fa-linkedin"></i>
+              <span class="username">Ben Centra</span>
+            </a>
+          </li>
           
         
           
@@ -566,7 +850,7 @@ enable_service q-meta
 
     <div class="site-signature">
       <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
-      <p class="text">A Hacker's journey of connecting ....
+      <p class="text">A simple yet classy theme for your Jekyll website or blog.
 </p>
     </div>
 

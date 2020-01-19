@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Double Barrel</title>
-    <description>A Hacker's journey of connecting ....
+    <title>Centrarium</title>
+    <description>A simple yet classy theme for your Jekyll website or blog.
 </description>
-    <link>nobinmathew.com/</link>
-    <atom:link href="nobinmathew.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 19 Jan 2020 09:14:03 +0000</pubDate>
-    <lastBuildDate>Sun, 19 Jan 2020 09:14:03 +0000</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <link>/</link>
+    <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 19 Jan 2020 09:31:01 +0000</pubDate>
+    <lastBuildDate>Sun, 19 Jan 2020 09:31:01 +0000</lastBuildDate>
+    <generator>Jekyll v3.8.6</generator>
     
       <item>
         <title>Deep Dive into IOVisor</title>
         <description>&lt;p&gt;Understand &lt;a href=&quot;https://www.iovisor.org/&quot;&gt;IOVisor&lt;/a&gt; better.&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://videos.cdn.redhat.com/summit2015/presentations/13737_an-overview-of-linux-networking-subsystem-extended-bpf.pdf&quot;&gt;Extended BPF and Data Plane Extensibility: An overview of networking and Linux&lt;/a&gt;&lt;br /&gt; &lt;a href=&quot;http://events.linuxfoundation.org/sites/events/files/slides/tracing-linux-ezannoni-linuxcon-ja-2015_0.pdf&quot;&gt;New (and Exciting!) Developments in Linux Tracing&lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://ctpd.dorsal.polymtl.ca/system/files/13May2015.pdf&quot;&gt;Extending the extended...</description>
         <pubDate>Sat, 23 Jan 2016 06:53:59 +0000</pubDate>
-        <link>nobinmathew.com/2016/01/23/iovisor-deep-dive.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2016/01/23/iovisor-deep-dive.html</guid>
+        <link>/2016/01/23/iovisor-deep-dive.html</link>
+        <guid isPermaLink="true">/2016/01/23/iovisor-deep-dive.html</guid>
         
         <category>iovisor</category>
         
@@ -38,8 +38,8 @@
         <title>Lock less programming &amp; Transactional Memory</title>
         <description>&lt;p&gt;Some good articles collected from Internet on lock free programming and Transactional Memory&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;http://arstechnica.com/gadgets/2011/08/ibms-new-transactional-memory-make-or-break-time-for-multithreaded-revolution/&quot;&gt;IBM’s new transactional memory: make-or-break time for multithreaded revolution&lt;/a&gt;&lt;/p&gt; &lt;p&gt;ABA Problem:&lt;br /&gt; &lt;a href=&quot;http://www.hergert.me/blog/2009/12/25/intro-to-lock-free-wait-free-and-aba.html&quot;&gt;Introduction to lock-free/wait-free...</description>
         <pubDate>Sat, 23 Jan 2016 04:53:59 +0000</pubDate>
-        <link>nobinmathew.com/2016/01/23/lock-less-programming-and-transactional-memory.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2016/01/23/lock-less-programming-and-transactional-memory.html</guid>
+        <link>/2016/01/23/lock-less-programming-and-transactional-memory.html</link>
+        <guid isPermaLink="true">/2016/01/23/lock-less-programming-and-transactional-memory.html</guid>
         
         <category>LockLess</category>
         
@@ -62,8 +62,8 @@
         <title>Distributed Systems: good introductory articles</title>
         <description>&lt;p&gt;&lt;a href=&quot;http://book.mixu.net/distsys/index.html&quot;&gt;Distributed systems for fun and profit&lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://blog.8thlight.com/rylan-dirksen/2013/10/04/synchronization-in-a-distributed-system.html&quot;&gt;Synchronization in a Distributed System&lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.quora.com/Why-use-Vector-Clocks-in-a-distributed-database&quot;&gt;Why use Vector Clocks in a distributed database?&lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.found.no/foundation/leader-election-in-general/&quot;&gt;Leader Election, Why Should I Care?&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Still...</description>
         <pubDate>Mon, 17 Aug 2015 12:36:23 +0000</pubDate>
-        <link>nobinmathew.com/2015/08/17/distributed-systems-good-introductory-articles.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2015/08/17/distributed-systems-good-introductory-articles.html</guid>
+        <link>/2015/08/17/distributed-systems-good-introductory-articles.html</link>
+        <guid isPermaLink="true">/2015/08/17/distributed-systems-good-introductory-articles.html</guid>
         
         <category>consensus</category>
         
@@ -80,8 +80,8 @@
         <title>Linux Glibc Heap internals</title>
         <description>&lt;p&gt;Some information on glibc heap implementation. Found very useful.&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;http://hamsa.cs.northwestern.edu/media/readings/free.pdf&quot;&gt;Once up on a free()&lt;/a&gt; from Phrack Inc.&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.blackhat.com/presentations/bh-usa-07/Ferguson/Whitepaper/bh-usa-07-ferguson-WP.pdf&quot;&gt;Understanding the heap by breaking it&lt;/a&gt; BlackHat.&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.blackhat.com/presentations/bh-usa-07/Ferguson/Presentation/bh-usa-07-ferguson.pdf&quot;&gt;Presentation&lt;/a&gt; from BlackHat.&lt;/p&gt;...</description>
         <pubDate>Mon, 16 Mar 2015 11:28:40 +0000</pubDate>
-        <link>nobinmathew.com/2015/03/16/linux-glibc-heap-internals.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2015/03/16/linux-glibc-heap-internals.html</guid>
+        <link>/2015/03/16/linux-glibc-heap-internals.html</link>
+        <guid isPermaLink="true">/2015/03/16/linux-glibc-heap-internals.html</guid>
         
         <category>glibc</category>
         
@@ -98,8 +98,8 @@
         <title>Devstack in single VM: Containers( LXC ) on Openstack</title>
         <description>&lt;p&gt;Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using other frameworks like docker, or many others.&lt;/p&gt; &lt;p&gt;There is a...</description>
         <pubDate>Mon, 16 Mar 2015 11:13:19 +0000</pubDate>
-        <link>nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html</guid>
+        <link>/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html</link>
+        <guid isPermaLink="true">/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html</guid>
         
         <category>Cloud</category>
         
@@ -126,8 +126,8 @@
         <title>Non-blocking accept() and connect()</title>
         <description>&lt;p&gt;I was trying to do accept() and listen() in a non-blocking way. Pseudo code is below.&lt;/p&gt; &lt;p&gt;&lt;strong&gt;Non Blocking Accept()&lt;/strong&gt;&lt;/p&gt; &lt;ol&gt; &lt;li&gt;Check whether listening fd is ready for read, by using select()&lt;/li&gt; &lt;li&gt;Once...</description>
         <pubDate>Fri, 10 Aug 2012 15:41:58 +0000</pubDate>
-        <link>nobinmathew.com/2012/08/10/non-blocking-accept-and-connect.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2012/08/10/non-blocking-accept-and-connect.html</guid>
+        <link>/2012/08/10/non-blocking-accept-and-connect.html</link>
+        <guid isPermaLink="true">/2012/08/10/non-blocking-accept-and-connect.html</guid>
         
         <category>Client</category>
         
@@ -146,8 +146,8 @@
         <title>SSL/TLS sockets programming using openssl and polarssl</title>
         <description>&lt;p&gt;I was trying to do some modifications to mongoose http server to use polarssl, to do that I tried to understand openssl and polarssl libraries, for that I wrote some...</description>
         <pubDate>Mon, 09 Jul 2012 16:05:02 +0000</pubDate>
-        <link>nobinmathew.com/2012/07/09/ssltls-sockets-programming-using-openssl-and-polarssl.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2012/07/09/ssltls-sockets-programming-using-openssl-and-polarssl.html</guid>
+        <link>/2012/07/09/ssltls-sockets-programming-using-openssl-and-polarssl.html</link>
+        <guid isPermaLink="true">/2012/07/09/ssltls-sockets-programming-using-openssl-and-polarssl.html</guid>
         
         <category>Client</category>
         
@@ -176,8 +176,8 @@
         <title>DRAM errors, cosmic rays and bit flips </title>
         <description>&lt;p&gt;Take a look at these articles, it will give you a good idea of memory errors and the use of ECC hardware. These bit flips are easy say but hard...</description>
         <pubDate>Wed, 27 Jun 2012 11:17:50 +0000</pubDate>
-        <link>nobinmathew.com/2012/06/27/dram-errors-cosmic-rays-and-bit-flips.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2012/06/27/dram-errors-cosmic-rays-and-bit-flips.html</guid>
+        <link>/2012/06/27/dram-errors-cosmic-rays-and-bit-flips.html</link>
+        <guid isPermaLink="true">/2012/06/27/dram-errors-cosmic-rays-and-bit-flips.html</guid>
         
         <category>Bit Flips</category>
         
@@ -196,8 +196,8 @@
         <title>I/O Multiplexing in Linux : Part 1</title>
         <description>&lt;p&gt;There is lot of discussion going on I/O multiplexing in Linux, select (), poll () and epoll () are the Linux mechanisms for that. I looked at the kernel implementation...</description>
         <pubDate>Mon, 25 Jun 2012 05:36:32 +0000</pubDate>
-        <link>nobinmathew.com/2012/06/25/io-multiplexing-in-linux-part-1.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2012/06/25/io-multiplexing-in-linux-part-1.html</guid>
+        <link>/2012/06/25/io-multiplexing-in-linux-part-1.html</link>
+        <guid isPermaLink="true">/2012/06/25/io-multiplexing-in-linux-part-1.html</guid>
         
         <category>epoll</category>
         
@@ -224,8 +224,8 @@
         <title>Inside select() call macros</title>
         <description>&lt;p&gt;I was looking at the IO multiplexing calls for writing an IO library, select() has some macros for setting, clearing the file descriptors in file descriptor sets. While looking a...</description>
         <pubDate>Tue, 12 Jun 2012 05:10:21 +0000</pubDate>
-        <link>nobinmathew.com/2012/06/12/inside-select-call-macros.html</link>
-        <guid isPermaLink="true">nobinmathew.com/2012/06/12/inside-select-call-macros.html</guid>
+        <link>/2012/06/12/inside-select-call-macros.html</link>
+        <guid isPermaLink="true">/2012/06/12/inside-select-call-macros.html</guid>
         
         <category>I/O</category>
         
