@@ -47,7 +47,7 @@ jekyll-archives:
     tag: '/tag/:name/'
 
 # Disqus comments
-disqus_shortname: nmathew
+disqus_shortname: nobinmathew
 disqus_baseurl: "nobinmathew.com"
 
 # Google analytics
