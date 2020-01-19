@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>I/O Multiplexing in Linux : Part 1</title>
+  <meta name="description" content="There is lot of discussion going on I/O multiplexing in Linux, select (), poll () and epoll () are the Linux mechanisms for that. I looked at the kernel impl...">
+  
+  <meta name="author" content="Nobin Mathew">
+  <meta name="copyright" content="&copy; Nobin Mathew 2020">
+  
+
+  <!-- External libraries -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="There is lot of discussion going on I/O multiplexing in Linux, select (), poll () and epoll () are the Linux mechanisms for that. I looked at the kernel impl..." />
+  <meta property="og:url" content="nobinmathew.com/2012/06/25/io-multiplexing-in-linux-part-1.html">
+  <meta property="og:site_name" content="Double Barrel" />
+  <meta property="og:title" content="I/O Multiplexing in Linux : Part 1" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="nobinmathew.com/assets/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="I/O Multiplexing in Linux : Part 1">
+  <meta name="twitter:description" content="There is lot of discussion going on I/O multiplexing in Linux, select (), poll () and epoll () are the Linux mechanisms for that. I looked at the kernel impl...">
+  <meta name="twitter:image" content="nobinmathew.com/assets/logo.png">
+  <meta name="twitter:url" content="nobinmathew.com/2012/06/25/io-multiplexing-in-linux-part-1.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="nobinmathew.com/2012/06/25/io-multiplexing-in-linux-part-1.html">
+	<link rel="alternate" type="application/rss+xml" title="Double Barrel" href="nobinmathew.com/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      
+      <img src="/assets/logo.png" alt="Double Barrel">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container " >
+  <div class="scrim ">
+    <header class="post-header">
+      <h1 class="title">I/O Multiplexing in Linux : Part 1</h1>
+      <p class="info">by <strong>Cloud Fundoo</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+ <span class="page-divider">
+  <span class="one"></span>
+  <span class="two"></span>
+</span>
+ 
+
+<section class="post-meta">
+  <div class="post-date">June 25, 2012</div>
+  <div class="post-categories">
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <p>There is lot of discussion going on I/O multiplexing in Linux, select (), poll () and epoll () are the Linux mechanisms for that. I looked at the kernel implementation in order to better understand that, this may help you guys also.
+We will start with examples of how to use these interfaces. In all the examples below, open the devices/file in non-blocking mode.</p>
+
+<p>select () example:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="n">fd_set</span> <span class="n">rfds</span><span class="p">;</span>
+<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>	<span class="cm">/** checking stdin **/</span>
+<span class="n">retval</span><span class="o">=</span><span class="n">select</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rfds</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="k">if</span><span class="p">((</span><span class="n">retval</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rfds</span><span class="p">))</span>
+	<span class="n">printf</span><span class="p">(</span><span class="err">“</span><span class="n">There</span> <span class="n">is</span> <span class="n">data</span> <span class="n">on</span> <span class="n">stdin</span><span class="err">\</span><span class="n">n</span><span class="err">”</span><span class="p">);</span></code></pre></figure>
+
+<p>poll () example:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">pollfd</span> <span class="n">rfd</span><span class="p">;</span>
+<span class="n">rfd</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>		<span class="cm">/** checking stdin **/</span>
+<span class="n">rfd</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">POLLIN</span><span class="p">;</span>
+<span class="n">retval</span> <span class="o">=</span> <span class="n">poll</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rfd</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="k">if</span><span class="p">((</span><span class="n">retval</span> <span class="o">==</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">rfd</span><span class="p">.</span><span class="n">revents</span><span class="o">&amp;</span><span class="n">POLLIN</span><span class="p">))</span>
+	<span class="n">printf</span><span class="p">(</span><span class="err">“</span><span class="n">There</span> <span class="n">is</span> <span class="n">data</span> <span class="n">on</span> <span class="n">stdin</span><span class="err">\</span><span class="n">n</span><span class="err">”</span><span class="p">);</span></code></pre></figure>
+
+<p>epoll () example:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">struct</span> <span class="n">epoll_event</span> <span class="n">event2read</span><span class="p">,</span> <span class="n">eventbuffer</span><span class="p">;</span>
+<span class="n">epfd</span> <span class="o">=</span> <span class="n">epoll_create</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
+<span class="n">event2read</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span> <span class="o">=</span> <span class="mi">0</span>		<span class="cm">/** checking stdin **/</span>
+<span class="n">event2read</span><span class="p">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">EPOLLIN</span><span class="o">|</span><span class="n">EPOLLET</span><span class="p">;</span>
+<span class="n">epoll_ctl</span><span class="p">(</span><span class="n">epfd</span><span class="p">,</span> <span class="n">EPOLL_CTL_ADD</span><span class="p">,</span> <span class="n">event2read</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">event2read</span><span class="p">);</span>
+<span class="n">retval</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">epfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">eventbuffer</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+<span class="k">if</span><span class="p">((</span><span class="n">retval</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">eventbuffer</span><span class="p">.</span><span class="n">events</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">))</span>
+	<span class="n">printf</span><span class="p">(</span><span class="err">“</span><span class="n">There</span> <span class="n">is</span> <span class="n">data</span> <span class="n">on</span> <span class="n">stdin</span><span class="err">\</span><span class="n">n</span><span class="err">”</span><span class="p">);</span></code></pre></figure>
+
+<p>Above examples are very simple and incomplete. The picture below will explain basically what happens inside all three interfaces.</p>
+
+<p><a href="http://cloudfundoo.files.wordpress.com/2012/06/io-linux.jpg"><img src="http://cloudfundoo.files.wordpress.com/2012/06/io-linux.jpg" alt="" /></a></p>
+
+<p>So why we have three interfaces, if all has almost same implementation. Basic difference comes in the implementation of data structure, where it is maintained (user space/kernel space) and also in the kernel system call interface.</p>
+
+<p>Let’s start with select (), select uses three bit masks, each having size 1024 bits (chunks of (1024/sizeof(unsigned long)), in a 32bit linux machine, it is 32, 32bit unsigned long integers. Three bit masks are used for getting ready for read, ready for write, on exception events of file descriptors. Select () has only one system call select() itself, each time you want to read events on fds, just fill the required bitmasks and call select (), the return from Syscall select () will have bitmasks having bit set for ready descriptors.</p>
+
+<p>Maximum value of fd and maximum number of fds a select () can monitor is 1024 (__FD_SETSIZE), see my previous post <a href="http://cloudfundoo.wordpress.com/2012/06/12/inside-select-call-macros/">Inside select() call macros</a>.</p>
+
+<p>Primary kernel interface for select () call is select system call, which is defined in fs/select.c, select () calls core_sys_select() and then do_select() which is the main handler.</p>
+
+<p>select() and core_sys_select() does nothing much, it copies some arguments from/to kernel/user space and does some error checking. do_select () implements most of the functionality of select(),</p>
+
+<p>do_select() has mainly three for() loops in linux kernel version 3.4.2.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">do_select</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">fd_set_bits</span> <span class="o">*</span><span class="n">fds</span><span class="p">,</span> <span class="k">struct</span> <span class="n">timespec</span> <span class="o">*</span><span class="n">end_time</span><span class="p">)</span>
+<span class="p">{</span>
+      <span class="p">........</span>
+    <span class="mi">1</span><span class="p">)</span><span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
+      <span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="n">rinp</span><span class="p">,</span> <span class="o">*</span><span class="n">routp</span><span class="p">,</span> <span class="o">*</span><span class="n">rexp</span><span class="p">,</span> <span class="o">*</span><span class="n">inp</span><span class="p">,</span> <span class="o">*</span><span class="n">outp</span><span class="p">,</span> <span class="o">*</span><span class="n">exp</span><span class="p">;</span>
+      <span class="p">...........</span>
+           <span class="mi">2</span><span class="p">)</span><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">rinp</span><span class="p">,</span> <span class="o">++</span><span class="n">routp</span><span class="p">,</span> <span class="o">++</span><span class="n">rexp</span><span class="p">)</span> <span class="p">{</span>
+             <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">in</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="n">all_bits</span><span class="p">,</span> <span class="n">bit</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+             <span class="p">...........</span>
+                 <span class="mi">3</span><span class="p">)</span><span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">__NFDBITS</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">,</span> <span class="o">++</span><span class="n">i</span><span class="p">,</span> <span class="n">bit</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">)</span>
+                   <span class="p">..........</span>
+                   <span class="k">if</span> <span class="p">(</span><span class="n">f_op</span> <span class="o">&amp;&amp;</span> <span class="n">f_op</span><span class="o">-&gt;</span><span class="n">poll</span><span class="p">){</span>
+                         <span class="n">wait_key_set</span><span class="p">(</span><span class="n">wait</span><span class="p">,</span> <span class="n">in</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">bit</span><span class="p">);</span>
+                         <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">f_op</span><span class="o">-&gt;</span><span class="n">poll</span><span class="p">)(</span><span class="n">file</span><span class="p">,</span> <span class="n">wait</span><span class="p">);</span>
+                         <span class="p">........</span></code></pre></figure>
+
+<p><a href="http://lxr.free-electrons.com/ident?i=fd_set_bits">fd_set_bits</a> *fds parameter to do_select() contains all the input/output bitmasks. In do_select() 1st for() loop goes forever till either any descriptor is ready or timeout occurs, in the 2nd for() loop do_select() goes through each unsigned long int (__NFDBITS) bitmask, and finally sets the corresponding output unsigned long bitmask.</p>
+
+<p>In the 3rd for() loop, it goes through each bit in each unsigned long (__NFDBITS) bitmask. It calls device specific poll () through file operations table corresponding to that fd (fd is set in the bitmask), device poll () will register the process (our application which invoked select() call) for a ready notification on  device specific read/write wait queues. Once device is ready for write/read it will wake up the process, i.e. select() call which is sleeping with a timeout.</p>
+
+<p>If device is ready for read/write while device poll() is called, poll() will anyway add entry on wait queues if timeout is not zero, but this time poll() will return with bitmask indicating device is ready for read/write.</p>
+
+<p>So if at least one fd is ready during the first iteration of 1st for() loop, it will come out of the for() loops, remove itself from all device specific wait queues using poll_freewait() and will return with ready fds bitmask. If none of the fds are ready by first iteration of the 1st for() loop, it will sleep till any fd is ready or till timeout expires, when it wakes up it will loop once again through all the three loops and collect all the ready events and frees itself from all device wait queues and returns with bitmask any ready fds.</p>
+
+<p>Some limitations of select() are, it can handle only a maximum of 1024 fds, which is the maximum default open file descriptors allowed for a process, there are patches available to overcome this. Select bitmasks are not persistent, we need to redo the entire process everytime we call the select(). Management of fds is difficult in the user space.</p>
+
+<p>We will cover poll() and epoll() in the next parts.</p>
+
+</article>
+
+
+
+<section class="tags">
+  <strong>Tags:</strong> <a href="/tag/epoll">epoll</a>,&nbsp;<a href="/tag/I/O">I/O</a>,&nbsp;<a href="/tag/Internals">Internals</a>,&nbsp;<a href="/tag/kernel">kernel</a>,&nbsp;<a href="/tag/Linux">Linux</a>,&nbsp;<a href="/tag/Multiplexing">Multiplexing</a>,&nbsp;<a href="/tag/Non Blocking">Non Blocking</a>,&nbsp;<a href="/tag/select()">select()</a>,&nbsp;<a href="/tag/server">server</a>
+</section>
+
+
+
+<section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+</section>
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+      <a href="//twitter.com/share?text=I%2FO+Multiplexing+in+Linux+%3A+Part+1&url=nobinmathew.com%2F2012%2F06%2F25%2Fio-multiplexing-in-linux-part-1.html&via="
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+        <i class="fa fa-twitter-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+      <a href="//www.facebook.com/sharer.php?t=I%2FO+Multiplexing+in+Linux+%3A+Part+1&u=nobinmathew.com%2F2012%2F06%2F25%2Fio-multiplexing-in-linux-part-1.html"
+        onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
+        <i class="fa fa-facebook-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+      <a href="//www.linkedin.com/shareArticle?mini=true&url=nobinmathew.com%2F2012%2F06%2F25%2Fio-multiplexing-in-linux-part-1.html"
+        onclick="window.open(this.href, 'linkedin-share', 'width=550,height=255');return false;">
+        <i class="fa fa-linkedin-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      <a href="//plus.google.com/share?title=I%2FO+Multiplexing+in+Linux+%3A+Part+1&url=nobinmathew.com%2F2012%2F06%2F25%2Fio-multiplexing-in-linux-part-1.html"
+        onclick="window.open(this.href, 'google-plus-share', 'width=550,height=255');return false;">
+        <i class="fa fa-google-plus-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=I%2FO+Multiplexing+in+Linux+%3A+Part+1&url=nobinmathew.com%2F2012%2F06%2F25%2Fio-multiplexing-in-linux-part-1.html&media=nobinmathew.com/assets/header_image.jpg"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('nobinmathew.com/2012/06/25/io-multiplexing-in-linux-part-1.html') + '&title=I/O Multiplexing in Linux : Part 1'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+	<section class="post-navigation">
+		<span class="prev-post">
+			
+				<a href="/2012/06/12/inside-select-call-macros.html">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
+					</span>
+					<span class="page-number">Inside select() call macros</span>
+				</a>
+			
+		</span>
+		<span class="next-post">
+			
+				<a href="/2012/06/27/dram-errors-cosmic-rays-and-bit-flips.html">
+					<span class="page-number">DRAM errors, cosmic rays and bit flips </span>
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			
+		</span>
+	</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Double Barrel</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:nobin.mathew@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">nobin.mathew@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+      <p class="text">A Hacker's journey of connecting ....
+</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

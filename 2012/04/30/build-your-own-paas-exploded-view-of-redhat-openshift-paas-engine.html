@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Build Your own PaaS : Exploded View of Redhat OpenShift PaaS Engine</title>
+  <meta name="description" content="Build your own PaaS (Platform as a Service), sounds like a impossible dream? No it is not, now with open source Redhat OpenShift Engine OpenShift Origin you ...">
+  
+  <meta name="author" content="Nobin Mathew">
+  <meta name="copyright" content="&copy; Nobin Mathew 2020">
+  
+
+  <!-- External libraries -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Build your own PaaS (Platform as a Service), sounds like a impossible dream? No it is not, now with open source Redhat OpenShift Engine OpenShift Origin you ..." />
+  <meta property="og:url" content="nobinmathew.com/2012/04/30/build-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html">
+  <meta property="og:site_name" content="Double Barrel" />
+  <meta property="og:title" content="Build Your own PaaS : Exploded View of Redhat OpenShift PaaS Engine" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="nobinmathew.com/assets/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Build Your own PaaS : Exploded View of Redhat OpenShift PaaS Engine">
+  <meta name="twitter:description" content="Build your own PaaS (Platform as a Service), sounds like a impossible dream? No it is not, now with open source Redhat OpenShift Engine OpenShift Origin you ...">
+  <meta name="twitter:image" content="nobinmathew.com/assets/logo.png">
+  <meta name="twitter:url" content="nobinmathew.com/2012/04/30/build-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="nobinmathew.com/2012/04/30/build-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html">
+	<link rel="alternate" type="application/rss+xml" title="Double Barrel" href="nobinmathew.com/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      
+      <img src="/assets/logo.png" alt="Double Barrel">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container " >
+  <div class="scrim ">
+    <header class="post-header">
+      <h1 class="title">Build Your own PaaS : Exploded View of Redhat OpenShift PaaS Engine</h1>
+      <p class="info">by <strong>Cloud Fundoo</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+ <span class="page-divider">
+  <span class="one"></span>
+  <span class="two"></span>
+</span>
+ 
+
+<section class="post-meta">
+  <div class="post-date">April 30, 2012</div>
+  <div class="post-categories">
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <p>Build your own PaaS (Platform as a Service), sounds like a impossible dream? No it is not, now with open source Redhat OpenShift Engine <a href="https://github.com/openshift">OpenShift Origin</a> you can build PaaS Engine, in your laptop, inside your company or you can provide public PaaS like Redhat OpenShift.</p>
+
+<p><a href="https://cloudfundoo.files.wordpress.com/2012/04/finished_crankcase2.jpg"><img src="https://cloudfundoo.files.wordpress.com/2012/04/finished_crankcase2.jpg?w=300" alt="" /></a></p>
+
+<p>The picture above is of a crankcase, this is what you see when you open a reciprocal engine, crankcase is the one which holds various engine parts like cylinders, heads and crankshaft.</p>
+
+<p>OpenShift engine also has a Crankcase, which does similar functionality of reciprocal engine crankcase. Openshift Crankcase the is the core of  Redhat OpenShift PaaS, which is completely open source and you can find entire code in github, see <a href="https://github.com/openshift/crankcase">Crankcase</a>.</p>
+
+<p>Redhat open sourced the entire software which powers the OpenShift PaaS, see the release <a href="http://www.redhat.com/about/news/archive/2012/4/Announcing-OpenShift-Origin-Open-Source-Code-For-Platform-as-a-Service?utm_source=twitterfeed&amp;utm_medium=twitter">here</a> and entire source code in <a href="https://github.com/openshift">Github</a>. See this <a href="https://openshift.redhat.com/app/opensource/download">page</a> for more information on source code.</p>
+
+<p><a href="https://cloudfundoo.files.wordpress.com/2012/04/architecture_overview-preview.jpg"><img src="https://cloudfundoo.files.wordpress.com/2012/04/architecture_overview-preview.jpg" alt="" /></a></p>
+
+<p>The Architecture of OpenShift is there in the <a href="https://openshift.redhat.com/community/wiki/architecture-overview">wiki</a>. You can use this to power a PaaS from your laptop, there is a wiki <a href="https://openshift.redhat.com/community/wiki/build-your-own">entry</a> describing how you can setup a local PaaS using a KVM virtual machine instance.</p>
+
+<p>There is a even simpler method to power your own PaaS from your laptop, for that you need to download LiveCD from <a href="http://mirror.openshift.com/pub/fedora-remix/16/x86_64/openshift_origin_livecd.iso">here</a>. If you mount this LiveCD in a virtual Machine (VirtualBox/KVM) instance, you can get your local OpenShift powered from your laptop. See this <a href="https://openshift.redhat.com/community/wiki/getting-started-with-openshift-origin-livecd">page</a> for steps.</p>
+
+<p><a href="https://cloudfundoo.files.wordpress.com/2012/04/cloud_computing_layers.png"><img src="https://cloudfundoo.files.wordpress.com/2012/04/cloud_computing_layers.png?w=300" alt="" /></a></p>
+
+<p>So how we will power Public PaaS?  for that you need huge infrastructure like servers, storage, networks, power, cooling etc. There is a cloud service segment called IaaS, which provide these infrastructure as a service. <a href="http://aws.amazon.com/">Amazon Web Services</a> (AWS) is a commercial IaaS provider, which Redhat uses for powering it’s <a href="https://openshift.redhat.com/app/">OpenShift</a> PaaS. With IaaS you can run OpenShift Engine on top of that cloud infrastructure to create your own PaaS.  If you want to have your own IaaS, then you can use <a href="http://openstack.org/">OpenStack</a>, which is a open source cloud OS/Framework for building IaaS.</p>
+
+</article>
+
+
+
+<section class="tags">
+  <strong>Tags:</strong> <a href="/tag/Architecture">Architecture</a>,&nbsp;<a href="/tag/AWS">AWS</a>,&nbsp;<a href="/tag/Cloud">Cloud</a>,&nbsp;<a href="/tag/Crankcase">Crankcase</a>,&nbsp;<a href="/tag/IaaS">IaaS</a>,&nbsp;<a href="/tag/Open Source">Open Source</a>,&nbsp;<a href="/tag/OpenShift">OpenShift</a>,&nbsp;<a href="/tag/PaaS">PaaS</a>,&nbsp;<a href="/tag/RedHat">RedHat</a>
+</section>
+
+
+
+<section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+</section>
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+      <a href="//twitter.com/share?text=Build+Your+own+PaaS+%3A+Exploded+View+of+Redhat+OpenShift+PaaS+Engine&url=nobinmathew.com%2F2012%2F04%2F30%2Fbuild-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html&via="
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+        <i class="fa fa-twitter-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+      <a href="//www.facebook.com/sharer.php?t=Build+Your+own+PaaS+%3A+Exploded+View+of+Redhat+OpenShift+PaaS+Engine&u=nobinmathew.com%2F2012%2F04%2F30%2Fbuild-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html"
+        onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
+        <i class="fa fa-facebook-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+      <a href="//www.linkedin.com/shareArticle?mini=true&url=nobinmathew.com%2F2012%2F04%2F30%2Fbuild-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html"
+        onclick="window.open(this.href, 'linkedin-share', 'width=550,height=255');return false;">
+        <i class="fa fa-linkedin-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      <a href="//plus.google.com/share?title=Build+Your+own+PaaS+%3A+Exploded+View+of+Redhat+OpenShift+PaaS+Engine&url=nobinmathew.com%2F2012%2F04%2F30%2Fbuild-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html"
+        onclick="window.open(this.href, 'google-plus-share', 'width=550,height=255');return false;">
+        <i class="fa fa-google-plus-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=Build+Your+own+PaaS+%3A+Exploded+View+of+Redhat+OpenShift+PaaS+Engine&url=nobinmathew.com%2F2012%2F04%2F30%2Fbuild-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html&media=nobinmathew.com/assets/header_image.jpg"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('nobinmathew.com/2012/04/30/build-your-own-paas-exploded-view-of-redhat-openshift-paas-engine.html') + '&title=Build Your own PaaS : Exploded View of Redhat OpenShift PaaS Engine'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+	<section class="post-navigation">
+		<span class="prev-post">
+			
+				<a href="/2012/04/27/deep-c-understanding-c-object-layout.html">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
+					</span>
+					<span class="page-number">Deep C++ : Understanding C++ Object Layout</span>
+				</a>
+			
+		</span>
+		<span class="next-post">
+			
+				<a href="/2012/05/03/production-ready-openstack-public-clouds-coming.html">
+					<span class="page-number">Production ready OpenStack public Clouds coming !</span>
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			
+		</span>
+	</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Double Barrel</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:nobin.mathew@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">nobin.mathew@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+      <p class="text">A Hacker's journey of connecting ....
+</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

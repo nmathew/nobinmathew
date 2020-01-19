@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Write an OpenShift app using Play !</title>
+  <meta name="description" content="First create a simple play application, for that run the following commands from cmdline">
+  
+  <meta name="author" content="Nobin Mathew">
+  <meta name="copyright" content="&copy; Nobin Mathew 2020">
+  
+
+  <!-- External libraries -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="First create a simple play application, for that run the following commands from cmdline" />
+  <meta property="og:url" content="nobinmathew.com/2012/04/14/write-an-openshift-app-using-play.html">
+  <meta property="og:site_name" content="Double Barrel" />
+  <meta property="og:title" content="Write an OpenShift app using Play !" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="nobinmathew.com/assets/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Write an OpenShift app using Play !">
+  <meta name="twitter:description" content="First create a simple play application, for that run the following commands from cmdline">
+  <meta name="twitter:image" content="nobinmathew.com/assets/logo.png">
+  <meta name="twitter:url" content="nobinmathew.com/2012/04/14/write-an-openshift-app-using-play.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="nobinmathew.com/2012/04/14/write-an-openshift-app-using-play.html">
+	<link rel="alternate" type="application/rss+xml" title="Double Barrel" href="nobinmathew.com/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      
+      <img src="/assets/logo.png" alt="Double Barrel">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container " >
+  <div class="scrim ">
+    <header class="post-header">
+      <h1 class="title">Write an OpenShift app using Play !</h1>
+      <p class="info">by <strong>Cloud Fundoo</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+ <span class="page-divider">
+  <span class="one"></span>
+  <span class="two"></span>
+</span>
+ 
+
+<section class="post-meta">
+  <div class="post-date">April 14, 2012</div>
+  <div class="post-categories">
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <p>First create a simple play application, for that run the following commands from cmdline</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+    play new simpleapp</code></pre></figure>
+
+<p>where simpleapp is the name of the application, this will create a folder named simpleapp containing play auto generated stuffs.</p>
+
+<p>Now edit the simpleapp/app/views/Application/index.html, replace the contents of index.html with</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">    
+    <span class="nt">&lt;h1&gt;</span>simple play application<span class="nt">&lt;/h1&gt;</span></code></pre></figure>
+
+<p>Running this app locally is very simple, just run the command below</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+play run simpleapp</code></pre></figure>
+
+<p>You can view your application at localhost:9000 in some web browser.</p>
+
+<p>Now lets go to Redhat OpenShift PaaS, and create an account at <a href="https://openshift.redhat.com">https://openshift.redhat.com</a>. Once account is created and OpenShift client tools are setup, we can go for creating an application in OpenShift.</p>
+
+<p>Basically app URL will be like</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+http://&lt;application name&gt;-&lt;domain-name&gt;.rhcloud.com</code></pre></figure>
+
+<p>, so create a domain and application. Domain creation is done by running</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+rhc-create-domain <span class="nt">-n</span> cloudfundoo <span class="nt">-l</span> mail@service.com <span class="nt">-p</span> password</code></pre></figure>
+
+<p>After that create the application</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+rhc-create-app <span class="nt">-l</span> mail@service.com <span class="nt">-p</span> password <span class="nt">-t</span> jbossas-7 <span class="nt">-a</span> simpleapp</code></pre></figure>
+
+<p>On application creation it will create a directory with same application name, contents of directory will be</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+<span class="c">#ls simpleapp</span>
+deployments pom.xml README src</code></pre></figure>
+
+<p>we will remove both pom.xml and src directory, which is not needed for our play app, remove from git tree also.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+<span class="c">#rm -rf pom.xml</span>
+<span class="c">#rm -rf src</span>
+<span class="c">#git add -A</span>
+<span class="c">#git commit -m "Remove the default code from git"</span>
+<span class="c">#git push origin</span></code></pre></figure>
+
+<p>Lets create a war for our simpleapp play framework application. Run this</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+play war &lt;directory of play simpleapp&gt; 
+ <span class="nt">-o</span> &lt;directory of OpenShift simpleapp directory&gt;/deployments/simpleapp.war</code></pre></figure>
+
+<p>Now create a simpleapp.war.dodeploy file to tell jboss to go ahead and deploy our app.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+<span class="c">#touch simpleapp/deployments/simpleapp.dodeploy</span></code></pre></figure>
+
+<p>Finally we need to push our play app’s war to OpenShift app git repository. For that we need to run these.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">    
+<span class="c">#cd simpleapp/deployments</span>
+<span class="c">#git add -A</span>
+<span class="c">#git commit -m "Checking in new play app war"</span>
+<span class="c">#git push origin</span></code></pre></figure>
+
+<p>Now time to see your live cloud app at <a href="http://simpleapp-cloudfundoo.rhcloud.com/simpleapp/">http://simpleapp-cloudfundoo.rhcloud.com/simpleapp/</a></p>
+
+
+</article>
+
+
+
+<section class="tags">
+  <strong>Tags:</strong> <a href="/tag/Cloud">Cloud</a>,&nbsp;<a href="/tag/JAVA">JAVA</a>,&nbsp;<a href="/tag/OpenShift">OpenShift</a>,&nbsp;<a href="/tag/Play">Play</a>,&nbsp;<a href="/tag/Play Framework">Play Framework</a>
+</section>
+
+
+
+<section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+</section>
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+      <a href="//twitter.com/share?text=Write+an+OpenShift+app+using+Play+%21&url=nobinmathew.com%2F2012%2F04%2F14%2Fwrite-an-openshift-app-using-play.html&via="
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+        <i class="fa fa-twitter-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+      <a href="//www.facebook.com/sharer.php?t=Write+an+OpenShift+app+using+Play+%21&u=nobinmathew.com%2F2012%2F04%2F14%2Fwrite-an-openshift-app-using-play.html"
+        onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
+        <i class="fa fa-facebook-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+      <a href="//www.linkedin.com/shareArticle?mini=true&url=nobinmathew.com%2F2012%2F04%2F14%2Fwrite-an-openshift-app-using-play.html"
+        onclick="window.open(this.href, 'linkedin-share', 'width=550,height=255');return false;">
+        <i class="fa fa-linkedin-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      <a href="//plus.google.com/share?title=Write+an+OpenShift+app+using+Play+%21&url=nobinmathew.com%2F2012%2F04%2F14%2Fwrite-an-openshift-app-using-play.html"
+        onclick="window.open(this.href, 'google-plus-share', 'width=550,height=255');return false;">
+        <i class="fa fa-google-plus-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=Write+an+OpenShift+app+using+Play+%21&url=nobinmathew.com%2F2012%2F04%2F14%2Fwrite-an-openshift-app-using-play.html&media=nobinmathew.com/assets/header_image.jpg"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('nobinmathew.com/2012/04/14/write-an-openshift-app-using-play.html') + '&title=Write an OpenShift app using Play !'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+	<section class="post-navigation">
+		<span class="prev-post">
+			
+		</span>
+		<span class="next-post">
+			
+				<a href="/2012/04/27/deep-c-understanding-c-object-layout.html">
+					<span class="page-number">Deep C++ : Understanding C++ Object Layout</span>
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			
+		</span>
+	</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Double Barrel</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:nobin.mathew@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">nobin.mathew@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+      <p class="text">A Hacker's journey of connecting ....
+</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

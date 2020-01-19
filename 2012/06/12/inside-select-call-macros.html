@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Inside select() call macros</title>
+  <meta name="description" content="I was looking at the IO multiplexing calls for writing an IO library, select() has some macros for setting, clearing the file descriptors in file descriptor ...">
+  
+  <meta name="author" content="Nobin Mathew">
+  <meta name="copyright" content="&copy; Nobin Mathew 2020">
+  
+
+  <!-- External libraries -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="I was looking at the IO multiplexing calls for writing an IO library, select() has some macros for setting, clearing the file descriptors in file descriptor ..." />
+  <meta property="og:url" content="nobinmathew.com/2012/06/12/inside-select-call-macros.html">
+  <meta property="og:site_name" content="Double Barrel" />
+  <meta property="og:title" content="Inside select() call macros" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="nobinmathew.com/assets/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Inside select() call macros">
+  <meta name="twitter:description" content="I was looking at the IO multiplexing calls for writing an IO library, select() has some macros for setting, clearing the file descriptors in file descriptor ...">
+  <meta name="twitter:image" content="nobinmathew.com/assets/logo.png">
+  <meta name="twitter:url" content="nobinmathew.com/2012/06/12/inside-select-call-macros.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="nobinmathew.com/2012/06/12/inside-select-call-macros.html">
+	<link rel="alternate" type="application/rss+xml" title="Double Barrel" href="nobinmathew.com/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      
+      <img src="/assets/logo.png" alt="Double Barrel">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container " >
+  <div class="scrim ">
+    <header class="post-header">
+      <h1 class="title">Inside select() call macros</h1>
+      <p class="info">by <strong>Cloud Fundoo</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+ <span class="page-divider">
+  <span class="one"></span>
+  <span class="two"></span>
+</span>
+ 
+
+<section class="post-meta">
+  <div class="post-date">June 12, 2012</div>
+  <div class="post-categories">
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <p>I was looking at the IO multiplexing calls for writing an IO library, select() has some macros for setting, clearing the file descriptors in file descriptor sets. While looking a for a method to optimize the walk through fd sets, i looked at the implementation of those macros.</p>
+
+<p>Let’s go through the implementation of FD_SET macro in Linux, other macros are similar.</p>
+
+<p>See both /usr/include/i386-linux-gnu/sys/select.h and /usr/include/i386-linux-gnu/bits/select.h, FD_SET is defined as below.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define    FD_SET(fd, fdsetp)    __FD_SET(fd, fdsetp)
+#define	__FD_SET(d, set)	\
+		((void)(__FDS_BITS(set)[__FD_ELT (d)] |= __FD_MASK(d)))
+#define	__FDS_BITS(set)		((set)-&gt;__fds_bits)
+#define	__FD_ELT(d)			((d)/__NFDBITS)
+#define	__FD_MASK(d)		((__fd_mask) 1 &lt;&lt; ((d) % __NFDBITS))</span></code></pre></figure>
+
+<p>Other definitions are below.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">typedef</span>	<span class="kt">long</span> <span class="kt">int</span> <span class="n">__fd_mask</span><span class="p">;</span>
+
+<span class="cp">#define	__NFDBITS			(8*(int) sizeof(__fd_mask))
+</span>
+<span class="k">typedef</span> <span class="k">struct</span> 
+<span class="p">{</span>
+	<span class="n">__fd_mask</span> <span class="n">__fds_bits</span><span class="p">[</span><span class="n">__FD_SETSIZE</span><span class="o">/</span><span class="n">__NFDBITS</span><span class="p">];</span>
+<span class="p">}</span> <span class="n">fd_set</span><span class="p">;</span></code></pre></figure>
+
+<p>In a 32 bit Linux system, __FD_SETSIZE is defined as 1024, i.e. usually maximum allowed file descriptors for a process, see “ulimit -a”</p>
+
+<p>See both /usr/include/i386-linux-gnu/sys/typesizes.h and /usr/include/linux/posix_types.h</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define __FD_SETSIZE	1024</span></code></pre></figure>
+
+<p>On 32bit Linux __NFDBITS is 32 since 8<em>sizeof(long int) is 8</em>4 i.e. 32.</p>
+
+<p>So we can rewrite the FD_SET macro as below.</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define	__FD_SET(d, set)	\
+	((void)(((set)-&gt;fds_bits)[((d)/ __NFDBITS)] |= ((__fd_mask) 1 &lt;&lt; ((d) % __NFDBITS))))
+</span>
+<span class="cm">/** On 32bit Linux **/</span>
+<span class="cp">#define	__FD_SET(d, set)	\
+	((void)(((set)-&gt;fds_bits)[((d)/ 32)] |= ((__fd_mask) 1 &lt;&lt; ((d) % 32))))</span></code></pre></figure>
+
+<p>fd_set has an array of 32 32bit long ints, so ((set)-&gt;fds_bits)[((d)/ 32)] finds array element where new fd falls, then ((__fd_mask) 1 « ((d) % 32))) finds the bit corresponding to new fd in that long int array element.</p>
+
+<p>So FD_SET sets the bit corresponding to new descriptor in a bit mask of size 1024.</p>
+
+</article>
+
+
+
+<section class="tags">
+  <strong>Tags:</strong> <a href="/tag/I/O">I/O</a>,&nbsp;<a href="/tag/Linux">Linux</a>,&nbsp;<a href="/tag/Non Blocking">Non Blocking</a>,&nbsp;<a href="/tag/poll">poll</a>,&nbsp;<a href="/tag/select()">select()</a>
+</section>
+
+
+
+<section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+</section>
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+      <a href="//twitter.com/share?text=Inside+select%28%29+call+macros&url=nobinmathew.com%2F2012%2F06%2F12%2Finside-select-call-macros.html&via="
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+        <i class="fa fa-twitter-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+      <a href="//www.facebook.com/sharer.php?t=Inside+select%28%29+call+macros&u=nobinmathew.com%2F2012%2F06%2F12%2Finside-select-call-macros.html"
+        onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
+        <i class="fa fa-facebook-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+      <a href="//www.linkedin.com/shareArticle?mini=true&url=nobinmathew.com%2F2012%2F06%2F12%2Finside-select-call-macros.html"
+        onclick="window.open(this.href, 'linkedin-share', 'width=550,height=255');return false;">
+        <i class="fa fa-linkedin-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      <a href="//plus.google.com/share?title=Inside+select%28%29+call+macros&url=nobinmathew.com%2F2012%2F06%2F12%2Finside-select-call-macros.html"
+        onclick="window.open(this.href, 'google-plus-share', 'width=550,height=255');return false;">
+        <i class="fa fa-google-plus-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=Inside+select%28%29+call+macros&url=nobinmathew.com%2F2012%2F06%2F12%2Finside-select-call-macros.html&media=nobinmathew.com/assets/header_image.jpg"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('nobinmathew.com/2012/06/12/inside-select-call-macros.html') + '&title=Inside select() call macros'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+	<section class="post-navigation">
+		<span class="prev-post">
+			
+				<a href="/2012/05/28/distributed-hash-tables-and-consistent-hashing.html">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
+					</span>
+					<span class="page-number">Distributed Hash Tables and Consistent Hashing</span>
+				</a>
+			
+		</span>
+		<span class="next-post">
+			
+				<a href="/2012/06/25/io-multiplexing-in-linux-part-1.html">
+					<span class="page-number">I/O Multiplexing in Linux : Part 1</span>
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			
+		</span>
+	</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Double Barrel</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:nobin.mathew@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">nobin.mathew@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+      <p class="text">A Hacker's journey of connecting ....
+</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

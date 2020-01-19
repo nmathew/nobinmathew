@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Non-blocking accept() and connect()</title>
+  <meta name="description" content="I was trying to do accept() and listen() in a non-blocking way. Pseudo code is below.">
+  
+  <meta name="author" content="Nobin Mathew">
+  <meta name="copyright" content="&copy; Nobin Mathew 2020">
+  
+
+  <!-- External libraries -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="I was trying to do accept() and listen() in a non-blocking way. Pseudo code is below." />
+  <meta property="og:url" content="nobinmathew.com/2012/08/10/non-blocking-accept-and-connect.html">
+  <meta property="og:site_name" content="Double Barrel" />
+  <meta property="og:title" content="Non-blocking accept() and connect()" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="nobinmathew.com/assets/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Non-blocking accept() and connect()">
+  <meta name="twitter:description" content="I was trying to do accept() and listen() in a non-blocking way. Pseudo code is below.">
+  <meta name="twitter:image" content="nobinmathew.com/assets/logo.png">
+  <meta name="twitter:url" content="nobinmathew.com/2012/08/10/non-blocking-accept-and-connect.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="nobinmathew.com/2012/08/10/non-blocking-accept-and-connect.html">
+	<link rel="alternate" type="application/rss+xml" title="Double Barrel" href="nobinmathew.com/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      
+      <img src="/assets/logo.png" alt="Double Barrel">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container " >
+  <div class="scrim ">
+    <header class="post-header">
+      <h1 class="title">Non-blocking accept() and connect()</h1>
+      <p class="info">by <strong>Cloud Fundoo</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+ <span class="page-divider">
+  <span class="one"></span>
+  <span class="two"></span>
+</span>
+ 
+
+<section class="post-meta">
+  <div class="post-date">August 10, 2012</div>
+  <div class="post-categories">
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <p>I was trying to do accept() and listen() in a non-blocking way. Pseudo code is below.</p>
+
+<p><strong>Non Blocking Accept()</strong></p>
+
+<ol>
+  <li>Check whether listening fd is ready for read, by using select()</li>
+  <li>Once ready issue accept(), this will return a new socket fd</li>
+</ol>
+
+<p><strong>Non Blocking Connect()</strong></p>
+
+<ol>
+  <li>Issue connect on socket fd</li>
+  <li>If it is returning EINPROGRESS, check whether fd is ready for write using select()</li>
+  <li>If it is ready check socket state using getsockopt()</li>
+  <li>If no errors, then socket connection is established</li>
+</ol>
+
+<p>TCP connection establishment is a three-way handshake, see below. Actually it is a 4-way process, but usually server will combine both SYN and ACK in a single packet, so three way handshake.</p>
+
+<p><img src="/assets/3-way-handshake.jpg" alt="3 way handshake&quot;" title="3 way handshake" class="img-responsive" /></p>
+
+<p>Client initiates the connection request by sending the SYN, this is what happens when it calls connect(), then it waits for ACK+SYN from server, when client gets ACK+SYN packets, it sends ACK packet and moves the socket to ESTABLISHED state, see TCP state diagram below.</p>
+
+<p><img src="/assets/tcp_states1.jpg" alt="TCP States" title="TCP States" class="img-responsive" /></p>
+
+<p>Only point at which client has to wait is when it waits for ACK+SYN packet from server, this is indicated by EINPROGRESS return code from connect() call. When  fd returns from select(), indicating ready for write, it means either some error happended or ACK is send(3-way handshake done) by client in response to ACK+SYN packet from server, we can check for error using getsockopt() call, if no errors then client socket is in ESTABLISHED state, ready for send/receive packets. Client need not call another connect() to ACK the ACK+SYN packet from server, it will be done by the stack/kernel.</p>
+
+<p>On the server side, I was on the impression that accept() is the one which is sending ACK+SYN packet to client, so accept() pseudo code may not work properly, it may not eliminate one delay (sending ACK+SYN and waiting for ACK from client)</p>
+
+<p><img src="/assets/tcp-queues.jpg" alt="TCP Queues" title="TCP Queues" class="img-responsive" /></p>
+
+<p>Actually accept() works in a different way, stack/kernel is the one doing the 3-way handshake and then new connection availability is notified to the application(server). TCP stack maintains two queues, one incomplete connection queue and one completed connection queue. Connection which are in SYN_RCVD state(i.e. send ACK+SYN packet in response to SYN from client) are in incomplete connection queue, connections which are in incomplete connection queue are moved to completed connection queue when it receives ACK from client in response to ACK+SYN. Accept() will be successful only if there is any connection in completed connection queue, select() will return ready for read only if there is any connection in completed connection queue.</p>
+
+<p>So Accept() is not the one which does 3-way handshake, but it simply returns new socket fd, if there any connections in completed connection queue, so our pseudo code will work correctly.</p>
+
+</article>
+
+
+
+<section class="tags">
+  <strong>Tags:</strong> <a href="/tag/Client">Client</a>,&nbsp;<a href="/tag/Linux">Linux</a>,&nbsp;<a href="/tag/Non Blocking">Non Blocking</a>,&nbsp;<a href="/tag/server">server</a>,&nbsp;<a href="/tag/sockets">sockets</a>
+</section>
+
+
+
+<section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+</section>
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+      <a href="//twitter.com/share?text=Non-blocking+accept%28%29+and+connect%28%29&url=nobinmathew.com%2F2012%2F08%2F10%2Fnon-blocking-accept-and-connect.html&via="
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+        <i class="fa fa-twitter-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+      <a href="//www.facebook.com/sharer.php?t=Non-blocking+accept%28%29+and+connect%28%29&u=nobinmathew.com%2F2012%2F08%2F10%2Fnon-blocking-accept-and-connect.html"
+        onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
+        <i class="fa fa-facebook-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+      <a href="//www.linkedin.com/shareArticle?mini=true&url=nobinmathew.com%2F2012%2F08%2F10%2Fnon-blocking-accept-and-connect.html"
+        onclick="window.open(this.href, 'linkedin-share', 'width=550,height=255');return false;">
+        <i class="fa fa-linkedin-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      <a href="//plus.google.com/share?title=Non-blocking+accept%28%29+and+connect%28%29&url=nobinmathew.com%2F2012%2F08%2F10%2Fnon-blocking-accept-and-connect.html"
+        onclick="window.open(this.href, 'google-plus-share', 'width=550,height=255');return false;">
+        <i class="fa fa-google-plus-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=Non-blocking+accept%28%29+and+connect%28%29&url=nobinmathew.com%2F2012%2F08%2F10%2Fnon-blocking-accept-and-connect.html&media=nobinmathew.com/assets/header_image.jpg"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('nobinmathew.com/2012/08/10/non-blocking-accept-and-connect.html') + '&title=Non-blocking accept() and connect()'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+	<section class="post-navigation">
+		<span class="prev-post">
+			
+				<a href="/2012/07/09/ssltls-sockets-programming-using-openssl-and-polarssl.html">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
+					</span>
+					<span class="page-number">SSL/TLS sockets programming using openssl and polarssl</span>
+				</a>
+			
+		</span>
+		<span class="next-post">
+			
+				<a href="/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
+					<span class="page-number">Devstack in single VM: Containers( LXC ) on Openstack</span>
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			
+		</span>
+	</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Double Barrel</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:nobin.mathew@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">nobin.mathew@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+      <p class="text">A Hacker's journey of connecting ....
+</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>

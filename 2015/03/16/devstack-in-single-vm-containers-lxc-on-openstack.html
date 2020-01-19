@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Devstack in single VM: Containers( LXC ) on Openstack</title>
+  <meta name="description" content="Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using o...">
+  
+  <meta name="author" content="Nobin Mathew">
+  <meta name="copyright" content="&copy; Nobin Mathew 2020">
+  
+
+  <!-- External libraries -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/monokai-sublime.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css">
+
+  <!-- Favicon and other icons (made with http://www.favicon-generator.org/) -->
+  <link rel="shortcut icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/assets/icons/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="57x57" href="/assets/icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/assets/icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/assets/icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/assets/icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/assets/icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/assets/icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/assets/icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/assets/icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/assets/icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/icons/favicon-16x16.png">
+  <link rel="manifest" href="/assets/icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/assets/icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <!-- Facebook OGP cards -->
+  <meta property="og:description" content="Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using o..." />
+  <meta property="og:url" content="nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
+  <meta property="og:site_name" content="Double Barrel" />
+  <meta property="og:title" content="Devstack in single VM: Containers( LXC ) on Openstack" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="nobinmathew.com/assets/logo.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="612" />
+  <meta property="og:image:height" content="605" />
+  
+
+  
+  <!-- Twitter: card tags -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Devstack in single VM: Containers( LXC ) on Openstack">
+  <meta name="twitter:description" content="Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using o...">
+  <meta name="twitter:image" content="nobinmathew.com/assets/logo.png">
+  <meta name="twitter:url" content="nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
+  
+
+  
+
+  <!-- Site styles -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html">
+	<link rel="alternate" type="application/rss+xml" title="Double Barrel" href="nobinmathew.com/feed.xml" />
+	
+	<!-- Tooltips -->
+	<script type="text/javascript">
+		window.tooltips = []
+	</script>
+</head>
+
+
+  <body>
+
+    <header class="navigation" role="banner">
+  <div class="navigation-wrapper">
+    <a href="/" class="logo">
+      
+      <img src="/assets/logo.png" alt="Double Barrel">
+      
+    </a>
+    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
+      <i class="fa fa-bars"></i>
+    </a>
+    <nav role="navigation">
+      <ul id="js-navigation-menu" class="navigation-menu show">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+    <div class="page-content">
+        <div class="post">
+
+<div class="post-header-container " >
+  <div class="scrim ">
+    <header class="post-header">
+      <h1 class="title">Devstack in single VM: Containers( LXC ) on Openstack</h1>
+      <p class="info">by <strong>Cloud Fundoo</strong></p>
+    </header>
+  </div>
+</div>
+
+<div class="wrapper">
+
+ <span class="page-divider">
+  <span class="one"></span>
+  <span class="two"></span>
+</span>
+ 
+
+<section class="post-meta">
+  <div class="post-date">March 16, 2015</div>
+  <div class="post-categories">
+  
+  </div>
+</section>
+
+<article class="post-content">
+  <p>Linux containers are lightweight virtualization (no virtualization, only compartmentalization). I was trying to bring plain containers using lxc, not using other frameworks like docker, or many others.</p>
+
+<p>There is a blog entry from canonical developer, <a href="https://zulcss.wordpress.com/2014/11/14/nova-compute-flex-introduction-and-getting-started/">here</a>. But when I tried it was giving some problems. So I had to solve some issues.</p>
+
+<p>First we need to create a Ubuntu 14.04 server/desktop VM, for server un-install juju(which may give some port binding issues).</p>
+
+<p>Follow instructions given in the link.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">dd </span><span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>&lt;name of your large file&gt; <span class="nv">bs</span><span class="o">=</span>1024k <span class="nv">count</span><span class="o">=</span>4000
+
+<span class="o">(</span>Create 4GB partition instead of 2GB<span class="o">)</span>
+
+<span class="nb">sudo </span>mkfs.btrfs &lt;name of your large file&gt;
+<span class="nb">sudo </span>mount <span class="nt">-t</span> brfs <span class="nt">-o</span> user_subvol_rm_allowed &lt;name of your large file&gt; &lt;mount point&gt;</code></pre></figure>
+
+<p>This is the directory where nova LXC driver will store configuration and lxc images.</p>
+
+<p>Now we should install devstack and ncflex (which is the nova LXC driver)</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">mkdir</span> <span class="nt">-p</span> /opt/stack
+
+git clone https://github.com/zulcss/nova-compute-flex <span class="nt">-b</span> stable/juno
+git clone https://github.com/openstack-dev/devstack <span class="nt">-b</span> stable/juno</code></pre></figure>
+
+<p>Then run</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/opt/stack/nova-compute-flex/contrib/devstack/prepare_devstack.sh</code></pre></figure>
+
+<p>after this localrc(from devstack directory) will look like</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cat </span>localrc
+
+<span class="nv">virt_type</span><span class="o">=</span>flex</code></pre></figure>
+
+<p>Then we should edit the localrc to contain this</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">VIRT_DRIVER</span><span class="o">=</span>flex
+
+disable_service n-net
+enable_service q-svc
+enable_service q-agt
+enable_service q-dhcp
+enable_service q-l3
+enable_service q-meta
+
+<span class="nv">GIT_BASE</span><span class="o">=</span>https://github.com
+<span class="nv">DATA_DIR</span><span class="o">=</span>/home/cloudfundoo/btrfs_dir
+
+<span class="nv">ADMIN_PASSWORD</span><span class="o">=</span>devstack
+<span class="nv">MYSQL_PASSWORD</span><span class="o">=</span>devstack
+<span class="nv">RABBIT_PASSWORD</span><span class="o">=</span>devstack
+<span class="nv">SERVICE_PASSWORD</span><span class="o">=</span>devstack
+<span class="nv">SERVICE_TOKEN</span><span class="o">=</span>token
+
+<span class="nv">NOVA_BRANCH</span><span class="o">=</span>stable/juno
+<span class="nv">CINDER_BRANCH</span><span class="o">=</span>stable/juno
+<span class="nv">GLANCE_BRANCH</span><span class="o">=</span>stable/juno
+<span class="nv">HORIZON_BRANCH</span><span class="o">=</span>stable/juno
+<span class="nv">KEYSTONE_BRANCH</span><span class="o">=</span>stable/juno
+<span class="nv">NEUTRON_BRANCH</span><span class="o">=</span>stable/juno
+<span class="nv">LOG</span><span class="o">=</span>True
+
+<span class="nv">FLOATING_RANGE</span><span class="o">=</span>192.168.1.96/27
+<span class="nv">PUBLIC_NETWORK_GATEWAY</span><span class="o">=</span>192.168.1.97 &lt; this is the gateway&gt;</code></pre></figure>
+
+<p>my lan is 192.168.1.xx/24, in that one section is assigned to lxc which will get spawned so FLOATING_RANGE=192.168.1.96/27</p>
+
+<p>Then we need some hacks to bring up the lxc.</p>
+
+<p>we need to have</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">iniset <span class="nv">$NOVA_CONF</span> DEFAULT scheduler_default_filters <span class="s2">"AllHostsFilter"</span></code></pre></figure>
+
+<p>in devstack/lib/nova. This is required because we are bringing up all the stuff in single VM. nova scheduler filters are there to choose the best host for spawning the lxc. For our case there is only one VM, so take all hosts. For more info see <a href="https://ask.openstack.org/en/question/21820/nova-scheduler-failed-to-schedule_run_instance-no-valid-host-was-found/">here</a>.</p>
+
+<p>neutron host not reachable.</p>
+
+<p>Comment out this line in /etc/neutron/neutron.conf and restart it. see <a href="https://ask.openstack.org/en/question/32666/connection-to-neutron-failederrno-11-connection-refused/">here</a>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#signing_dir = /var/cache/neutron</span></code></pre></figure>
+
+<p>Then add a python binary /usr/bin/lxc-usernet-manage</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">chmod </span>a+x /usr/bin/lxc-usernet-manage
+
+<span class="nb">cat</span> /usr/bin/lxc-usernet-manage</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1">#! /usr/bin/python
+# PBR Generated from u'console_scripts'
+</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">ncflex.nova.virt.flex.lxc_usernet</span> <span class="kn">import</span> <span class="n">manage_main</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+<span class="n">sys</span><span class="o">.</span><span class="nb">exit</span><span class="p">(</span><span class="n">manage_main</span><span class="p">())</span></code></pre></figure>
+
+<p>This python script is executed by rootwrap of openstack.</p>
+
+<p>From here it is normal process of spawning VM.</p>
+
+<p>When I spawned lxc was coming up, but I was unable to login with key pairs.</p>
+
+</article>
+
+
+
+<section class="tags">
+  <strong>Tags:</strong> <a href="/tag/Cloud">Cloud</a>,&nbsp;<a href="/tag/container">container</a>,&nbsp;<a href="/tag/devstack">devstack</a>,&nbsp;<a href="/tag/Linux">Linux</a>,&nbsp;<a href="/tag/lxc">lxc</a>,&nbsp;<a href="/tag/OpenStack">OpenStack</a>,&nbsp;<a href="/tag/python">python</a>,&nbsp;<a href="/tag/ubtunu">ubtunu</a>,&nbsp;<a href="/tag/vm">vm</a>
+</section>
+
+
+
+<section class="rss">
+  <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+</section>
+
+<section class="share">
+  <span>Share: </span>
+  
+    
+    
+      <a href="//twitter.com/share?text=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html&via="
+        onclick="window.open(this.href, 'twitter-share', 'width=550,height=255');return false;">
+        <i class="fa fa-twitter-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+      <a href="//www.facebook.com/sharer.php?t=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&u=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
+        onclick="window.open(this.href, 'facebook-share', 'width=550,height=255');return false;">
+        <i class="fa fa-facebook-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+      <a href="//www.linkedin.com/shareArticle?mini=true&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
+        onclick="window.open(this.href, 'linkedin-share', 'width=550,height=255');return false;">
+        <i class="fa fa-linkedin-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      <a href="//plus.google.com/share?title=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html"
+        onclick="window.open(this.href, 'google-plus-share', 'width=550,height=255');return false;">
+        <i class="fa fa-google-plus-square fa-lg"></i>
+      </a>
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+      <a href="//www.pinterest.com/pin/create/button/?description=Devstack+in+single+VM%3A+Containers%28+LXC+%29+on+Openstack&url=nobinmathew.com%2F2015%2F03%2F16%2Fdevstack-in-single-vm-containers-lxc-on-openstack.html&media=nobinmathew.com/assets/header_image.jpg"
+        onclick="window.open(this.href, 'pinterest-share', 'width=550,height=255');return false;">
+        <i class="fa fa-pinterest-square fa-lg"></i>
+      </a>
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+      <a href="//www.reddit.com/submit" onclick="window.location = '//www.reddit.com/submit?url=' + encodeURIComponent('nobinmathew.com/2015/03/16/devstack-in-single-vm-containers-lxc-on-openstack.html') + '&title=Devstack in single VM: Containers( LXC ) on Openstack'; return false">
+        <i class="fa fa-reddit-square fa-lg"></i>
+      </a>
+    
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+  
+</section>
+
+	<section class="post-navigation">
+		<span class="prev-post">
+			
+				<a href="/2012/08/10/non-blocking-accept-and-connect.html">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-left fa-stack-1x fa-inverse"></i>
+					</span>
+					<span class="page-number">Non-blocking accept() and connect()</span>
+				</a>
+			
+		</span>
+		<span class="next-post">
+			
+				<a href="/2015/03/16/linux-glibc-heap-internals.html">
+					<span class="page-number">Linux Glibc Heap internals</span>
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-angle-double-right fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			
+		</span>
+	</section>
+
+
+
+
+</div>
+</div>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h3 class="footer-heading">Double Barrel</h3>
+
+    <div class="site-navigation">
+
+      <p><strong>Site Map</strong></p>
+      <ul class="pages">
+				
+	
+
+	
+
+	
+
+	
+	<li class="nav-link"><a href="/posts/">Posts</a>
+	
+
+	
+	<li class="nav-link"><a href="/about/">Who am I</a>
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+      </ul>
+    </div>
+
+    <div class="site-contact">
+
+      <p><strong>Contact</strong></p>
+      <ul class="social-media-list">
+        <li>
+          <a href="mailto:nobin.mathew@gmail.com">
+            <i class="fa fa-envelope-o"></i>
+            <span class="username">nobin.mathew@gmail.com</span>
+          </a>
+        </li>
+
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+
+      </ul>
+    </div>
+
+    <div class="site-signature">
+      <p class="rss-subscribe text"><strong>Subscribe <a href="/feed.xml">via RSS</a></strong></p>
+      <p class="text">A Hacker's journey of connecting ....
+</p>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- Scripts -->
+<script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+<script src="//unpkg.com/popper.js@1"></script>
+<script src="//unpkg.com/tippy.js@5"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  // Default syntax highlighting
+  hljs.initHighlightingOnLoad();
+
+  // Header
+  var menuToggle = $('#js-mobile-menu').unbind();
+  $('#js-navigation-menu').removeClass("show");
+  menuToggle.on('click', function(e) {
+    e.preventDefault();
+    $('#js-navigation-menu').slideToggle(function(){
+      if($('#js-navigation-menu').is(':hidden')) {
+        $('#js-navigation-menu').removeAttr('style');
+      }
+    });
+  });
+
+	// Enable tooltips via Tippy.js
+	if (Array.isArray(window.tooltips)) {
+		window.tooltips.forEach(function(tooltip) {
+			var selector = tooltip[0];
+			var config = tooltip[1];
+			tippy(selector, config);
+		})
+	}
+});
+
+</script>
+
+
+
+
+
+
+  </body>
+
+</html>
