@@ -4,7 +4,7 @@ comments: true
 date: 2020-02-05 04:53:59+00:00
 layout: post
 slug: linux terminals internals
-title: Linux Terminals Internals
+title: Linux TTY Internals
 wordpress_id: 7
 tags:
 - Linux
