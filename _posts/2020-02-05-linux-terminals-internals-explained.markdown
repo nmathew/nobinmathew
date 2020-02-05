@@ -18,7 +18,7 @@ tags:
 
 Some good links to linux tty subsystem, high level overview:
 
-[The TTY demystified](https://www.linusakesson.net/programming/tty/i)
+[The TTY demystified](https://www.linusakesson.net/programming/tty/)
 
 [Course 102: Lecture 9: Input Output Internals](https://www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals)
 
