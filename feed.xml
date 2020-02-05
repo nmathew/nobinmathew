@@ -6,13 +6,13 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 05 Feb 2020 07:50:04 +0000</pubDate>
-    <lastBuildDate>Wed, 05 Feb 2020 07:50:04 +0000</lastBuildDate>
+    <pubDate>Wed, 05 Feb 2020 07:56:06 +0000</pubDate>
+    <lastBuildDate>Wed, 05 Feb 2020 07:56:06 +0000</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
     
       <item>
         <title>Linux TTY Internals</title>
-        <description>&lt;p&gt;Some good links to linux tty subsystem, high level overview:&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.linusakesson.net/programming/tty/&quot;&gt;The TTY demystified&lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals&quot;&gt;Course 102: Lecture 9: Input Output Internals&lt;/a&gt;&lt;/p&gt; &lt;iframe src=&quot;//www.slideshare.net/slideshow/embed_code/key/or73rPXmox52nD&quot; width=&quot;595&quot; height=&quot;485&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot;...</description>
+        <description>&lt;p&gt;Some good links to linux tty subsystem, high level overview:&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.linusakesson.net/programming/tty/&quot;&gt;The TTY demystified&lt;/a&gt;&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;https://www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals&quot;&gt;Course 102: Lecture 9: Input Output Internals&lt;/a&gt;&lt;/p&gt; &lt;iframe src=&quot;//www.slideshare.net/slideshow/embed_code/key/or73rPXmox52nD?startSlide=4&quot; width=&quot;595&quot; height=&quot;485&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot;...</description>
         <pubDate>Wed, 05 Feb 2020 04:53:59 +0000</pubDate>
         <link>/2020/02/05/linux-terminals-internals.html</link>
         <guid isPermaLink="true">/2020/02/05/linux-terminals-internals.html</guid>
