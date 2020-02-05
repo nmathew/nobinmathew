@@ -6,9 +6,33 @@
 </description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 19 Jan 2020 11:09:14 +0000</pubDate>
-    <lastBuildDate>Sun, 19 Jan 2020 11:09:14 +0000</lastBuildDate>
+    <pubDate>Wed, 05 Feb 2020 06:00:45 +0000</pubDate>
+    <lastBuildDate>Wed, 05 Feb 2020 06:00:45 +0000</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>Linux Terminals Internals</title>
+        <description>Some good links to linux tty subsystem, high level overview [The TTY demystified](https://www.linusakesson.net/programming/tty/) [Course 102: Lecture 9: Input Output Internals](https://www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals) &lt;iframe src=&quot;//www.slideshare.net/slideshow/embed_code/key/or73rPXmox52nD&quot; width=&quot;595&quot; height=&quot;485&quot; frameborder=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; scrolling=&quot;no&quot; style=&quot;border:1px solid...</description>
+        <pubDate>Wed, 05 Feb 2020 04:53:59 +0000</pubDate>
+        <link>/2020/02/05/linux-terminals-internals.mardown</link>
+        <guid isPermaLink="true">/2020/02/05/linux-terminals-internals.mardown</guid>
+        
+        <category>Linux</category>
+        
+        <category>Internals</category>
+        
+        <category>Terminals</category>
+        
+        <category>Pseudo Terminals</category>
+        
+        <category>Virtual Terminals</category>
+        
+        <category>TTY subsystem</category>
+        
+        <category>Notes</category>
+        
+        
+      </item>
     
       <item>
         <title>Deep Dive into IOVisor</title>
@@ -216,26 +240,6 @@
         <category>select()</category>
         
         <category>server</category>
-        
-        
-      </item>
-    
-      <item>
-        <title>Inside select() call macros</title>
-        <description>&lt;p&gt;I was looking at the IO multiplexing calls for writing an IO library, select() has some macros for setting, clearing the file descriptors in file descriptor sets. While looking a...</description>
-        <pubDate>Tue, 12 Jun 2012 05:10:21 +0000</pubDate>
-        <link>/2012/06/12/inside-select-call-macros.html</link>
-        <guid isPermaLink="true">/2012/06/12/inside-select-call-macros.html</guid>
-        
-        <category>I/O</category>
-        
-        <category>Linux</category>
-        
-        <category>Non Blocking</category>
-        
-        <category>poll</category>
-        
-        <category>select()</category>
         
         
       </item>
