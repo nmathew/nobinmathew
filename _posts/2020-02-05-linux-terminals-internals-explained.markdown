@@ -20,6 +20,6 @@ Some good links to linux tty subsystem, high level overview:
 
 [The TTY demystified](https://www.linusakesson.net/programming/tty/)
 
-[Course 102: Lecture 9: Input Output Internals](https://www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals)
+[Input Output Internals](https://www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals)
 
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/or73rPXmox52nD?startSlide=4" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals" title="Input Output Internals " target="_blank">Input Output Internals </a> </strong> from <strong><a href="//www.slideshare.net/a_elarabawy" target="_blank">Ahmed El-Arabawy</a></strong> </div>
+<iframe src="//www.slideshare.net/slideshow/embed_code/key/or73rPXmox52nD?startSlide=4" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen="" width="595" height="485" frameborder="0"> </iframe>
