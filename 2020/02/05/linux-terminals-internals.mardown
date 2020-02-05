@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Linux Terminals Internals</title>
-  <meta name="description" content="Some good links to linux tty subsystem, high level overview">
+  <meta name="description" content="Some good links to linux tty subsystem, high level overview:">
   
   <meta name="author" content="Nobin Mathew">
   <meta name="copyright" content="&copy; Nobin Mathew 2020">
@@ -41,7 +41,7 @@
 
   
   <!-- Facebook OGP cards -->
-  <meta property="og:description" content="Some good links to linux tty subsystem, high level overview" />
+  <meta property="og:description" content="Some good links to linux tty subsystem, high level overview:" />
   <meta property="og:url" content="/2020/02/05/linux-terminals-internals.mardown">
   <meta property="og:site_name" content="Double Barrel" />
   <meta property="og:title" content="Linux Terminals Internals" />
@@ -56,7 +56,7 @@
   <!-- Twitter: card tags -->
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Linux Terminals Internals">
-  <meta name="twitter:description" content="Some good links to linux tty subsystem, high level overview">
+  <meta name="twitter:description" content="Some good links to linux tty subsystem, high level overview:">
   <meta name="twitter:image" content="/assets/logo.png">
   <meta name="twitter:url" content="/2020/02/05/linux-terminals-internals.mardown">
   
@@ -301,10 +301,12 @@
 </section>
 
 <article class="post-content">
-  Some good links to linux tty subsystem, high level overview
+  Some good links to linux tty subsystem, high level overview:
 
-[The TTY demystified](https://www.linusakesson.net/programming/tty/)
+[The TTY demystified](https://www.linusakesson.net/programming/tty/i)
+
 [Course 102: Lecture 9: Input Output Internals](https://www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals)
+
 <iframe src="//www.slideshare.net/slideshow/embed_code/key/or73rPXmox52nD" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/a_elarabawy/c-102-lec09inputoutputinternals" title="Course 102: Lecture 9: Input Output Internals " target="_blank">Course 102: Lecture 9: Input Output Internals </a> </strong> from <strong><a href="https://www.slideshare.net/a_elarabawy" target="_blank">Ahmed El-Arabawy</a></strong> </div>
 
 
